@@ -13,11 +13,13 @@ void IRAM_ATTR handleInterrupt() {
   bool pinState = GPIO.in & (1 << SIGNAL_PIN);
   signal_detected = true;
 
-  if (pinState) { // Rising edge
+  bool isStartEdge = (active_type == PPM && !ppm_is_positive) ? !pinState : pinState;
+
+  if (isStartEdge) { 
     if (duration > 2500) {
       current_channel = 0;
     } else {
-      if (active_type == PPM && current_channel < 8 && last_rising_time > 0) {
+      if (active_type == PPM && current_channel < ppm_channels && last_rising_time > 0) {
         channels[current_channel] = now - last_rising_time;
         current_channel++;
       }
@@ -27,7 +29,7 @@ void IRAM_ATTR handleInterrupt() {
       last_cycle_time = now - last_rising_time;
     }
     last_rising_time = now;
-  } else { // Falling edge
+  } else { // Ending edge of pulse
     last_high_duration = duration;
     if (active_type == PWM) {
       channels[0] = duration;

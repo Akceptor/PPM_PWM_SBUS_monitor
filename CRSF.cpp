@@ -2,16 +2,15 @@
 #include "Globals.h"
 #include "Utils.h"
 
-#define CRSF_BAUD 420000
 #define CRSF_ADDR_FLIGHT_CONTROLLER 0xC8
 #define CRSF_ADDR_RECEIVER          0xEC
 #define CRSF_ADDR_TRANSMITTER       0xEA
 #define CRSF_FRAME_RC_CHANNELS_PACKED 0x16
 #define CRSF_RC_FRAME_LENGTH 24
 
-void startCRSF(bool inverted) {
+void startCRSF(uint32_t baud, bool inverted) {
   delay(20);
-  SerialRX.begin(CRSF_BAUD, SERIAL_8N1, SIGNAL_PIN, -1, inverted);
+  SerialRX.begin(baud, SERIAL_8N1, SIGNAL_PIN, -1, inverted);
   serial_active = true;
 }
 
