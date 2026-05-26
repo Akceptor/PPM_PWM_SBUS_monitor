@@ -5,6 +5,7 @@
 #define CRSF_ADDR_FLIGHT_CONTROLLER 0xC8
 #define CRSF_ADDR_RECEIVER          0xEC
 #define CRSF_ADDR_TRANSMITTER       0xEA
+#define CRSF_ADDR_RADIO             0xEE
 #define CRSF_FRAME_RC_CHANNELS_PACKED 0x16
 #define CRSF_RC_FRAME_LENGTH 24
 
@@ -19,7 +20,8 @@ void decodeCRSF() {
     uint8_t addr = SerialRX.peek();
     if (addr != CRSF_ADDR_FLIGHT_CONTROLLER &&
         addr != CRSF_ADDR_RECEIVER &&
-        addr != CRSF_ADDR_TRANSMITTER) {
+        addr != CRSF_ADDR_TRANSMITTER &&
+        addr != CRSF_ADDR_RADIO) {
       SerialRX.read();
       continue;
     }
